@@ -1,8 +1,11 @@
 import promptSync from 'prompt-sync';
+import config from 'config'
 
 const prompt = promptSync({sigint:true});
-const guessNumber = 5;
-
+const guessNumber = 1 + Math.trunc(Math.random() * 10);
+if (config.has('test') && config.get('test')){
+    console.log(guessNumber)
+}
 let running = true;
 
 do {
