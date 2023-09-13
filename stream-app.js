@@ -1,48 +1,29 @@
-import fs from 'node:fs/promises';
 import http from "node:http";
-import { Stream } from 'node:stream';
+import config from 'config';
+import { URL } from "node:url";
+import { log } from "node:console";
+import RouterDocText from "./src/routes/Router.js";
+import { DocTextView } from "./src/view/DocTextView.js";
 
-//stream theory:
-//
-// writeble stream (write) analog outputstream
-// readable stream (read) analog inputstream
-// duplex (write and read) analog socket
-// transform stream 
+const SERVER_PORT = 'server.port'
 
-//Example:
-//<readable strem>.pipe(<writeble stream>)
-//<socket stream>.map<request => protocol.getResponse(request)>.pipe(<socket strem>)
-//pipeline(<readble stream>, <transform stream>, <writeble stream>)
+//Comments
 
-
-const isCommets = process.argv[2] == 'comments'
-const fileInputName = process.argv[3] || 'stream-app.js';
-const fileOutput = process.argv[4] || "stream-app-out"
- 
-
-const handlerInput = await fs.open(fileInputName);
-const handlerOutput = await fs.open(fileOutput, 'w');
-const streamOutput = handlerOutput.createWriteStream();
-
-//handlerInput.readFile('utf8').then(data => console.log(data));
-
-function getStreamWith(handler,isComments) {
-    let streamInput = handler.createReadStream();
-    streamInput.setEncoding('utf8');
-    streamInput = streamInput.flatMap(chank => chank.split('\n')).filter(line => {
-        line = line.trim();
-        const result = line.startsWith('//');
-        return isComments ? result : !result
-        line.trim().startsWith('//')
-    })
-    .map(line => isComments ? line.substr('//') : line);
-return streamInput;
-}
-
-// getStreamWith(handlerInput,isCommets).forEach(line => {
-//     console.log(line);
-// });
+const server = http.createServer();
+const PORT = process.env.PORT || (config.has(SERVER_PORT) && config.get(SERVER_PORT)) || 0;
+server.listen(PORT, () => console.log(`server is listen on port ${server.address().port}`));
+const router = new RouterDocText(server);
+const docTextView = new DocTextView();
+server.on('request',(req,response) => {
+    response.setHeader('content-type','text/html');
+    const reqUrl = new URL(`http://${req.headers.host}${req.url}`);
+    if(!router.getRoutes().includes(reqUrl.pathname)){
+        docTextView.renderError(reqUrl.pathname + " unknow operation", response);
+        return;
+    }    
+    
+    server.emit(reqUrl.pathname, reqUrl.searchParams, response);
+})
 
 
-getStreamWith(handlerInput,isCommets).pipe(streamOutput);
 
