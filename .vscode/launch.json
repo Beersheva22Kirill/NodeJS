@@ -15,6 +15,7 @@
             "env": {
                 "ATLAS_URI":"mongodb+srv://root:admin1234@myclaster.tiwkzgn.mongodb.net/college?retryWrites=true&w=majority"
             }
+            
         }
     ]
 }
