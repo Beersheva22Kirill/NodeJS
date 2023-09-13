@@ -8,11 +8,13 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "args": [".vscode/launch.json"],
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\stream-app.js"
+            "program": "${workspaceFolder}\\mongoApp.js",
+            "env": {
+                "ATLAS_URI":"mongodb+srv://root:admin1234@myclaster.tiwkzgn.mongodb.net/college?retryWrites=true&w=majority"
+            }
         }
     ]
 }
