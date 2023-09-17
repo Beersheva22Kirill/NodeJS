@@ -2,5 +2,9 @@
   "server": {
     "port":3500,
     "hostname":""
-  } 
+  } ,
+  "mongodb":{
+    "uri":"mongo_uri_test",
+    "dbUsers":"users"
+  }
 }
