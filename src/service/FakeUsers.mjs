@@ -1,7 +1,7 @@
 import {faker} from "@faker-js/faker"
+import { FAKE_PASSWORD, FAKE_ROLES } from "../constant/constants.mjs";
 
-const FAKE_PASSWORD = 'admin1234';
-const FAKE_ROLES = ['admin','user','superadmin'];
+
 export default class FakeUsers {
 
     #fakeUsers;

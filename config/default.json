@@ -1,10 +1,26 @@
 {
   "server": {
-    "port":3500,
-    "hostname":""
+    "port":3500
   } ,
   "mongodb":{
-    "uri":"mongo_uri_test",
-    "dbUsers":"users"
+    "env_uri_company":"ATLAS_URI_COMPANY_TETS",
+    "env_uri_users":"ATLAS_URI_ACCOUNTS_TEST",
+    "dbUsers":"users",
+    "dbCompany":"company"
+  },
+  "jwt":{
+      "env_secret":"JWT_SECRET_TEST",
+      "expiresIn":"1h"
+  },
+  "employee" : {
+      "minDate": "1950-01-01",
+      "maxDate": "2004-12-31",
+      "minId": 100000,
+      "maxId": 999999,
+      "minSalary": 7000,
+      "maxSalary": 50000,
+      "departments":[
+          "QA", "Audit", "Accounting", "Development", "Management"
+      ]
   }
 }

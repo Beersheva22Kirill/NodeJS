@@ -1,20 +1,18 @@
 import express from 'express'
-import Joi from 'joi';
-import { schemaUser, schemaUserYuri } from '../validation/UserValidator.mjs';
+import { schemaUser } from '../validation/UserValidator.mjs';
 import { validate } from '../middleware/validation.mjs';
 import UsersService from '../service/UsersService.mjs';
-import config from 'config';
+import asyncHandler from 'express-async-handler'
+import { userService } from '../../config/serviceConfig.mjs';
+import authVerification from '../middleware/authVerification.mjs';
 
 export const users = express.Router();
-const service = new UsersService(process.env.ATLAS_URI_ACCOUNTS_TEST,config.get('mongodb.dbUsers'));
+const service = new UsersService();
 
-users.use(validate(schemaUserYuri))
-users.post('/signup',async (req,res) => {
-    
-    //My validation with assert and schema of user (Joi)
-    // Joi.assert(req.body,schemaUser); 
-    // req.body.validate = true;
-    
+users.use(validate(schemaUser))
+users.post('/signup', authVerification('ADMIN_ACCOUNTS'), asyncHandler(
+    async (req,res) => {
+     
     if (!req.validated) {
         res.status(500)
         throw('This API requires validation')
@@ -27,6 +25,30 @@ users.post('/signup',async (req,res) => {
     } 
         
     res.status(201).send(await service.addAccount(req.body));
-    
-    
-})
+})   
+)
+
+users.get("/username", authVerification('ADMIN_ACCOUNTS',"ADMIN","USER"), asyncHandler(
+    async (req,res) => {
+        const username = req.query.username;
+
+        const account = await userService.getAccount(username);
+        if(!account) {
+            res.status(404);
+            throw `account ${username} not found`
+        }
+        res.send(account);
+    }
+))
+
+users.post("/login", asyncHandler(
+    async (req,res) => {
+        const loginData = req.body;
+        const accessToken = await userService.login(loginData);
+        if(!accessToken){
+            res.status(400);
+            throw `Wrong credentials`
+        }
+        res.send({accessToken});
+
+}))
