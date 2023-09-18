@@ -29,25 +29,25 @@ export default class FakeUsers {
     #getRoles(){
         let result = [];
         const countRoles = this.#getRandomNumber(0,FAKE_ROLES.length)
-        if (countRoles == FAKE_ROLES.length - 1) {
-            result = FAKE_ROLES;
-        } else {
-            for (let index = 0; index < countRoles + 1; index++) {
-               let indexRoles;
-                do {
-                   indexRoles = this.#getRandomNumber(0,FAKE_ROLES.length);
-                } while (result.includes(FAKE_ROLES[indexRoles]));  
-                result.push(FAKE_ROLES[indexRoles]);
+            for (let index = 0; index <= countRoles; index++) {
+               const indexRoles = this.#getUniqIndexRoles(result);  
+               result.push(FAKE_ROLES[indexRoles]);
             }            
-        }
         return result;
+    }
+
+    #getUniqIndexRoles(result){
+        let indexRoles;
+        do {
+            indexRoles = this.#getRandomNumber(0,FAKE_ROLES.length);
+         } while (result.includes(FAKE_ROLES[indexRoles]));
+         return indexRoles;
     }
 
 
     #getRandomNumber(min,max){
 
         return Math.trunc(Math.random() * (max - min) + min)
-
     }
 
     get users(){
