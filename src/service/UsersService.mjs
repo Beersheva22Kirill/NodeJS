@@ -46,7 +46,7 @@ export default class UsersService {
     }
 
     async login(loginData){
-        const account = await this.getAccount(loginData.username);
+        const account = await this.getAccount(loginData.email);
         let accessToken;
         if (account && await bcrypt.compare(loginData.password, account.passwordHash)) {
             accessToken = getJWTToken(account.username,account.roles);

@@ -3,6 +3,7 @@ import express from 'express';
 import config from 'config';
 import { users } from './src/router/Users.mjs';
 import morgan from 'morgan';
+import cors from 'cors';
 import errorHandler from './src/middleware/errorHandler.mjs';
 import { randomUsers } from './src/router/RandomUsers.mjs';
 import { employees } from './src/router/Employees.mjs';
@@ -11,6 +12,7 @@ import auth from './src/middleware/auth.mjs';
 
 
 const app = express();
+app.use(cors());
 const SERVER_PORT = 'server.port';
 app.use(bodyParser.json());
 app.use(morgan('tiny'));

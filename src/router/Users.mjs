@@ -5,32 +5,22 @@ import UsersService from '../service/UsersService.mjs';
 import asyncHandler from 'express-async-handler'
 import { userService } from '../../config/serviceConfig.mjs';
 import authVerification from '../middleware/authVerification.mjs';
+import valid from '../middleware/valid.mjs';
 
 export const users = express.Router();
 const service = new UsersService();
 
 users.use(validate(schemaUser))
-users.post('/signup', authVerification('ADMIN_ACCOUNTS'), asyncHandler(
+users.post('/signup', valid, authVerification('ADMIN_ACCOUNTS'), asyncHandler(
     async (req,res) => {
-     
-    if (!req.validated) {
-        res.status(500)
-        throw('This API requires validation')
-    }  
-
-    if (req.joiError){
-        res.status(400)
-        throw(`Error validation: ${req.joiError}`)
-       
-    } 
         
     res.status(201).send(await service.addAccount(req.body));
 })   
 )
 
-users.get("/username", authVerification('ADMIN_ACCOUNTS',"ADMIN","USER"), asyncHandler(
+users.get("/:username", authVerification('ADMIN_ACCOUNTS',"ADMIN","USER"), asyncHandler(
     async (req,res) => {
-        const username = req.query.username;
+        const username = req.params.username;
 
         const account = await userService.getAccount(username);
         if(!account) {
