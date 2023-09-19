@@ -5,7 +5,7 @@ const readlineInterface = readline.createInterface({
     output: process.stdout
 });
 readlineInterface.on('SIGINT', () => {console.log(`^C is forbidden`);  })
-export class PromptAsync extends EventsEmitter{
+export default class PromptAsync extends EventsEmitter{
    
    
     prompt(promptStr) {
