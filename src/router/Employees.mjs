@@ -14,10 +14,6 @@ employees.use(validate(schemaEmployee))
 
 employees.post('', authVerification('ADMIN'), valid, asyncHandler(
     async (req,res) => {
-        if(req.joiError) {
-            res.status(400);
-            throw req.joiError;
-        }
         const employee = await employeesService.addEmployee(req.body);
         if (!employee && req.body.id) {
             res.status(400);
@@ -29,10 +25,7 @@ employees.post('', authVerification('ADMIN'), valid, asyncHandler(
 
 employees.put('/:id',authVerification("ADMIN"), valid, asyncHandler(
     async (req, res) => {
-        if(req.joiError) {
-            res.status(400);
-            throw req.joiError;
-        }
+        
         if (req.params.id != req.body.id) {
             res.status(400);
             throw `id in request parameter (${req.params.id}) doesn't match the id in employee object (req.body.id)`
