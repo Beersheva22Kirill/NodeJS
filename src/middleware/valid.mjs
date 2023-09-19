@@ -10,11 +10,11 @@ const valid = (req,res,next) => {
     }
 
     if(!req.joiError){
-        req.status(400);
+        res.status(400);
         throw req.joiError;
     }
 
-    
+    res.status(200);
     next();
 }
 
