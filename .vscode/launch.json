@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\express-app.js",
+            "program": "${workspaceFolder}\\app-websocket.mjs",
             "env": {
                 "ATLAS_URI_ACCOUNTS_TEST":"mongodb+srv://root:admin1234@myclaster.tiwkzgn.mongodb.net/users?retryWrites=true&w=majority",
                 "ATLAS_URI_COMPANY_TETS":"mongodb+srv://root:admin1234@myclaster.tiwkzgn.mongodb.net/company?retryWrites=true&w=majority",
